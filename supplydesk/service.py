@@ -17,20 +17,31 @@ class OrderService:
     def place_order(self, customer_type, items, fulfillment="pickup"):
         state = self.store.load()
         priced = self._price_request(state, customer_type, items, fulfillment)
-        lines = priced["items"]
-        order = {
+        order = self._build_order_record(state, priced)
+        self._deduct_stock(state, order["items"])
+        self._save_new_order(state, order)
+        return order
+
+    def _build_order_record(self, state, priced):
+        """Turn a priced request into an order with the next ID and status placed."""
+        return {
             "order_id": "ORD-" + str(state["next_order_number"]).zfill(4),
             "status": "placed",
             **priced,
         }
+
+    def _deduct_stock(self, state, lines):
+        """Remove every ordered unit from the catalog stock in state."""
         for line in lines:
             for product in state["catalog"]:
                 if product["product_id"] == line["product_id"]:
                     product["stock"] -= line["quantity"]
+
+    def _save_new_order(self, state, order):
+        """Append the order, advance the order number and write the save file."""
         state["next_order_number"] += 1
         state["orders"].append(order)
         self.store.save(state)
-        return order
 
     def _price_request(self, state, customer_type, items, fulfillment):
         """Validate a request against the current state and price it.
