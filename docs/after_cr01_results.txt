@@ -1,0 +1,95 @@
+test_cli_places_express_order (tests.test_cr01_express.ExpressInterfaceTests.test_cli_places_express_order)
+The place command accepts --fulfillment express and prints the 1,200-cent charge. ... ok
+test_cli_rejects_unknown_fulfillment_and_help_lists_express (tests.test_cr01_express.ExpressInterfaceTests.test_cli_rejects_unknown_fulfillment_and_help_lists_express)
+The CLI rejects --fulfillment overnight with a nonzero exit and its help mentions express. ... ok
+test_menu_prompt_offers_and_accepts_express (tests.test_cr01_express.ExpressInterfaceTests.test_menu_prompt_offers_and_accepts_express)
+The menu fulfillment prompt lists express and passes it to the service. ... ok
+test_express_kept_after_cancel (tests.test_cr01_express.ExpressOrderTests.test_express_kept_after_cancel)
+Cancelling an express order restores stock but keeps express and its recorded prices. ... ok
+test_express_kept_after_reopen (tests.test_cr01_express.ExpressOrderTests.test_express_kept_after_reopen)
+An express order reloads from the save file with fulfillment and charge intact. ... ok
+test_other_fulfillment_values_rejected (tests.test_cr01_express.ExpressOrderTests.test_other_fulfillment_values_rejected)
+Values like "overnight", "Express" or "" raise ValueError and change no saved data. ... ok
+test_quote_equals_placed_express_order (tests.test_cr01_express.ExpressOrderTests.test_quote_equals_placed_express_order)
+For the same express request, quote() and place_order() return the same items and prices. ... ok
+test_cr01_example_regular_three_hoodies (tests.test_cr01_express.ExpressPricingTests.test_cr01_example_regular_three_hoodies)
+CR-01 example: regular express, three hoodies: express not waived above 10,000, total 13,200. ... ok
+test_cr01_example_regular_two_notebooks (tests.test_cr01_express.ExpressPricingTests.test_cr01_example_regular_two_notebooks)
+CR-01 example: regular express, two notebooks, totals 2,200 cents. ... ok
+test_cr01_example_student_two_hoodies (tests.test_cr01_express.ExpressPricingTests.test_cr01_example_student_two_hoodies)
+CR-01 example: student express, two hoodies: discount on merchandise only, total 8,400. ... ok
+test_express_never_waived_at_or_above_10000 (tests.test_cr01_express.ExpressPricingTests.test_express_never_waived_at_or_above_10000)
+Express still costs 1,200 at exactly 10,000 and when a student order is over 10,000 after discount. ... ok
+test_pickup_and_standard_delivery_unchanged (tests.test_cr01_express.ExpressPricingTests.test_pickup_and_standard_delivery_unchanged)
+Adding express does not change pickup (free) or standard delivery (600, free from 10,000). ... ok
+test_delivery_charged_when_discount_drops_below_10000 (tests.test_safety_net.PricingRulesTests.test_delivery_charged_when_discount_drops_below_10000)
+Delivery uses the discounted amount: subtotal 11,110 minus 1,111 is 9,999, so 600 applies. ... ok
+test_regular_customer_never_gets_discount (tests.test_safety_net.PricingRulesTests.test_regular_customer_never_gets_discount)
+Regular customers get no discount even when the subtotal is well above 5,000. ... ok
+test_regular_delivery_free_at_exactly_10000 (tests.test_safety_net.PricingRulesTests.test_regular_delivery_free_at_exactly_10000)
+Regular delivery is free when the (undiscounted) total is exactly 10,000 cents. ... ok
+test_spec_example_regular_delivery_three_hoodies (tests.test_safety_net.PricingRulesTests.test_spec_example_regular_delivery_three_hoodies)
+Spec example: regular delivery of three hoodies is 12,000 with free delivery. ... ok
+test_spec_example_regular_pickup_two_notebooks (tests.test_safety_net.PricingRulesTests.test_spec_example_regular_pickup_two_notebooks)
+Spec example: regular pickup of two notebooks totals 1,000 cents. ... ok
+test_spec_example_student_delivery_two_hoodies (tests.test_safety_net.PricingRulesTests.test_spec_example_student_delivery_two_hoodies)
+Spec example: student delivery of two hoodies gets 800 off plus 600 delivery. ... ok
+test_student_delivery_free_at_exactly_10000_after_discount (tests.test_safety_net.PricingRulesTests.test_student_delivery_free_at_exactly_10000_after_discount)
+Student delivery is free when subtotal minus discount is exactly 10,000 cents. ... ok
+test_student_subtotal_4999_gets_no_discount (tests.test_safety_net.PricingRulesTests.test_student_subtotal_4999_gets_no_discount)
+A student subtotal of 4,999 cents is below the 5,000 threshold: no discount. ... ok
+test_student_subtotal_5001_gets_discount_rounded (tests.test_safety_net.PricingRulesTests.test_student_subtotal_5001_gets_discount_rounded)
+A student subtotal of 5,001 cents gets 10% off, 500.1 rounded to 500. ... ok
+test_student_subtotal_exactly_5000_gets_discount (tests.test_safety_net.PricingRulesTests.test_student_subtotal_exactly_5000_gets_discount)
+A student subtotal of exactly 5,000 cents ("at least 5,000") gets 10% off. ... ok
+test_place_order_returns_full_order_deducts_stock_and_saves (tests.test_safety_net.RefactoringGuardTests.test_place_order_returns_full_order_deducts_stock_and_saves)
+place_order returns every order field, deducts stock and persists both to the save file. ... ok
+test_quote_and_place_order_agree (tests.test_safety_net.RefactoringGuardTests.test_quote_and_place_order_agree)
+For the same request and stock, quote() and place_order() return the same items and prices. ... ok
+test_quote_creates_no_save_file_and_uses_no_order_id (tests.test_safety_net.RefactoringGuardTests.test_quote_creates_no_save_file_and_uses_no_order_id)
+quote() never creates or changes a save file, reserves stock, or consumes an order ID. ... ok
+test_cancelling_twice_does_not_restore_stock_again (tests.test_safety_net.StockHistoryCancellationTests.test_cancelling_twice_does_not_restore_stock_again)
+A second cancel returns the cancelled order without changing stock or history. ... ok
+test_data_survives_reopening (tests.test_safety_net.StockHistoryCancellationTests.test_data_survives_reopening)
+A new service on the same save file sees the same history, stock and next order ID. ... ok
+test_duplicate_lines_exceeding_stock_rejected (tests.test_safety_net.StockHistoryCancellationTests.test_duplicate_lines_exceeding_stock_rejected)
+Two lines of one product whose combined quantity exceeds stock raise ValueError. ... ok
+test_history_keeps_cancelled_orders (tests.test_safety_net.StockHistoryCancellationTests.test_history_keeps_cancelled_orders)
+list_orders keeps cancelled orders in placement order with original items and totals. ... ok
+test_malformed_save_file_raises_instead_of_resetting (tests.test_safety_net.StockHistoryCancellationTests.test_malformed_save_file_raises_instead_of_resetting)
+A malformed save file makes operations raise an error and is left untouched. ... ok
+test_order_ids_increase_and_are_never_reused (tests.test_safety_net.StockHistoryCancellationTests.test_order_ids_increase_and_are_never_reused)
+Order IDs start at ORD-0001, increase by one, and a cancelled ID is not reused. ... ok
+test_past_orders_keep_recorded_prices (tests.test_safety_net.StockHistoryCancellationTests.test_past_orders_keep_recorded_prices)
+After a catalog price change, existing orders still show the prices recorded at placement. ... ok
+test_stock_never_goes_negative (tests.test_safety_net.StockHistoryCancellationTests.test_stock_never_goes_negative)
+No sequence of placements, including split duplicate lines, drives stock below zero. ... ok
+test_unknown_order_id_raises_value_error (tests.test_safety_net.StockHistoryCancellationTests.test_unknown_order_id_raises_value_error)
+get_order and cancel_order with an unknown ID raise ValueError and change nothing. ... ok
+test_empty_items_rejected (tests.test_safety_net.ValidationTests.test_empty_items_rejected)
+An empty item list raises ValueError and changes nothing. ... ok
+test_invalid_customer_type_rejected (tests.test_safety_net.ValidationTests.test_invalid_customer_type_rejected)
+A customer type other than regular/student raises ValueError and changes nothing. ... ok
+test_invalid_fulfillment_rejected (tests.test_safety_net.ValidationTests.test_invalid_fulfillment_rejected)
+A fulfillment other than pickup/delivery raises ValueError and changes nothing. ... ok
+test_quantity_100_rejected (tests.test_safety_net.ValidationTests.test_quantity_100_rejected)
+Quantity 100 is above the 1-99 range: ValueError and nothing changes. ... ok
+test_quantity_boolean_rejected (tests.test_safety_net.ValidationTests.test_quantity_boolean_rejected)
+The boolean True is not a valid service quantity: ValueError and nothing changes. ... ok
+test_quantity_float_rejected (tests.test_safety_net.ValidationTests.test_quantity_float_rejected)
+The float 2.0 is not a valid service quantity: ValueError and nothing changes. ... ok
+test_quantity_numeric_string_rejected (tests.test_safety_net.ValidationTests.test_quantity_numeric_string_rejected)
+The string "2" is not a valid service quantity: ValueError and nothing changes. ... ok
+test_quantity_zero_rejected (tests.test_safety_net.ValidationTests.test_quantity_zero_rejected)
+Quantity 0 is below the 1-99 range: ValueError and nothing changes. ... ok
+test_unknown_product_rejected (tests.test_safety_net.ValidationTests.test_unknown_product_rejected)
+An unknown product ID raises ValueError and changes nothing. ... ok
+test_cancel_order_restores_stock (tests.test_smoke.OrderSmokeTests.test_cancel_order_restores_stock) ... ok
+test_order_can_be_reopened (tests.test_smoke.OrderSmokeTests.test_order_can_be_reopened) ... ok
+test_regular_pickup_quote (tests.test_smoke.OrderSmokeTests.test_regular_pickup_quote) ... ok
+test_student_delivery_quote (tests.test_smoke.OrderSmokeTests.test_student_delivery_quote) ... ok
+
+----------------------------------------------------------------------
+Ran 47 tests in 0.094s
+
+OK

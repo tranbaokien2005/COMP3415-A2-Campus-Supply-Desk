@@ -81,7 +81,7 @@ Then:
 3. Enter `notebook` for the product ID.
 4. Enter `2` for the quantity.
 5. Press Enter without typing another product ID to finish adding items.
-6. Press Enter at the fulfillment prompt to use `pickup`.
+6. Press Enter at the fulfillment prompt to use `pickup`. The other options are `delivery` and `express`.
 
 With sufficient stock available, the quote should show a **$10.00 total**.
 
@@ -172,7 +172,10 @@ You can perform operations directly instead of using the menu. These commands ar
 python -m supplydesk catalog
 python -m supplydesk quote --customer regular --item notebook:2
 python -m supplydesk quote --customer student --fulfillment delivery --item hoodie:2
+python -m supplydesk quote --customer student --fulfillment express --item hoodie:2
 ```
+
+Fulfillment options: `pickup` (free), `delivery` ($6.00, free when the order is at least $100.00 after discount) and `express` ($12.00 flat, never waived).
 
 Use repeated `--item` options for multiple items:
 

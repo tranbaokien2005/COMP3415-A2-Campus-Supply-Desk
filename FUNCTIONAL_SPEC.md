@@ -57,7 +57,7 @@ place_order(customer_type, items, fulfillment="pickup")
 Both operations require:
 
 - Customer type: exactly `regular` or `student`.
-- Fulfillment: exactly `pickup` or `delivery`.
+- Fulfillment: exactly `pickup`, `delivery` or `express` (see CR-01). Any other value, including different capitalisation, is invalid.
 - Items: a nonempty list of dictionaries, each containing `product_id` and `quantity`.
 - A valid product ID for every item.
 - An integer quantity from 1 through 99 inclusive for each item. Booleans, fractional numbers, and numeric strings are not valid quantities when calling the service directly.
@@ -87,15 +87,27 @@ All service calculations and stored monetary values use integer Canadian cents.
 3. Round the discount to the nearest whole cent, with half a cent rounded upward. Do not use binary floating-point values for money calculations.
 4. Pickup is free.
 5. Delivery costs 600 cents ($6.00). Delivery is free when the subtotal minus the discount is at least 10,000 cents ($100.00).
-6. Total = subtotal minus discount plus delivery charge. No taxes or other charges apply.
+6. Express delivery (CR-01) always costs 1,200 cents ($12.00). It is never waived, whatever the order value.
+7. The student discount applies to merchandise only. It is calculated from the subtotal and never reduces the delivery or express charge.
+8. Total = subtotal minus discount plus delivery charge. No taxes or other charges apply.
 
 Examples—all amounts below are in cents:
 
 - Regular pickup, two notebooks: subtotal 1,000; discount 0; delivery 0; total 1,000.
 - Student delivery, two hoodies: subtotal 8,000; discount 800; delivery 600; total 7,800.
 - Regular delivery, three hoodies: subtotal 12,000; discount 0; delivery 0; total 12,000.
+- Regular express, two notebooks: subtotal 1,000; discount 0; delivery 1,200; total 2,200.
+- Student express, two hoodies: subtotal 8,000; discount 800; delivery 1,200; total 8,400.
+- Regular express, three hoodies: subtotal 12,000; discount 0; delivery 1,200; total 13,200.
 
 These rules apply identically to quotes and placed orders.
+
+## Change request CR-01: Express delivery
+
+- `express` is a third fulfillment option, accepted by the service, the individual commands (`--fulfillment express`) and the menu fulfillment prompt.
+- Express costs a flat 1,200 cents and is never waived. The student discount applies to merchandise only.
+- Pickup and standard delivery pricing are unchanged.
+- Express orders store `fulfillment: "express"` and the 1,200-cent charge in `delivery_cents`. Both are kept after reopening and after cancellation.
 
 ## Quotes
 

@@ -9,7 +9,8 @@ CUSTOMER_TYPES = (REGULAR, STUDENT)
 
 PICKUP = "pickup"
 DELIVERY = "delivery"
-FULFILLMENT_OPTIONS = (PICKUP, DELIVERY)
+EXPRESS = "express"
+FULFILLMENT_OPTIONS = (PICKUP, DELIVERY, EXPRESS)
 
 MIN_QUANTITY = 1
 MAX_QUANTITY = 99
@@ -19,6 +20,7 @@ STUDENT_DISCOUNT_THRESHOLD_CENTS = 5000
 STUDENT_DISCOUNT_PERCENT = 10
 FREE_DELIVERY_THRESHOLD_CENTS = 10000
 DELIVERY_FEE_CENTS = 600
+EXPRESS_FEE_CENTS = 1200  # CR-01: flat fee, never waived
 
 # Order records.
 ORDER_ID_PREFIX = "ORD-"
@@ -33,6 +35,19 @@ def percent_of_cents(amount_cents, percent):
     Uses only integer arithmetic (no floats), as the spec requires for money.
     """
     return (amount_cents * percent + 50) // 100
+
+
+def delivery_charge_cents(fulfillment, discounted_subtotal_cents):
+    """Return the delivery charge for a fulfillment option.
+
+    Pickup is free. Standard delivery is free from the free-delivery threshold.
+    Express (CR-01) always costs the express fee, whatever the order value.
+    """
+    if fulfillment == EXPRESS:
+        return EXPRESS_FEE_CENTS
+    if fulfillment == DELIVERY and discounted_subtotal_cents < FREE_DELIVERY_THRESHOLD_CENTS:
+        return DELIVERY_FEE_CENTS
+    return 0
 
 
 class OrderService:
@@ -84,7 +99,7 @@ class OrderService:
         if customer_type not in CUSTOMER_TYPES:
             raise ValueError("Customer type must be regular or student.")
         if fulfillment not in FULFILLMENT_OPTIONS:
-            raise ValueError("Fulfillment must be pickup or delivery.")
+            raise ValueError("Fulfillment must be pickup, delivery or express.")
         if not isinstance(items, list) or not items:
             raise ValueError("An order must contain at least one item.")
         lines = []
@@ -121,9 +136,8 @@ class OrderService:
         discount = 0
         if customer_type == STUDENT and subtotal >= STUDENT_DISCOUNT_THRESHOLD_CENTS:
             discount = percent_of_cents(subtotal, STUDENT_DISCOUNT_PERCENT)
-        delivery = 0
-        if fulfillment == DELIVERY and subtotal - discount < FREE_DELIVERY_THRESHOLD_CENTS:
-            delivery = DELIVERY_FEE_CENTS
+        # The discount is applied to merchandise only; the delivery charge is never discounted.
+        delivery = delivery_charge_cents(fulfillment, subtotal - discount)
         return {
             "customer_type": customer_type,
             "fulfillment": fulfillment,
